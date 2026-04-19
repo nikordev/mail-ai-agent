@@ -24,6 +24,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     environment: test
+    needs: build
     steps:
       - name: Download docker image
         uses: actions/download-artifact@v4
