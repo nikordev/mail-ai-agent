@@ -1,0 +1,61 @@
+name: Run Agent Tests
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build docker image
+        run: docker build -t mail-ai-agent-app .
+      - name: Export docker image
+        run: docker save mail-ai-agent-app > mail-ai-agent-app.tar
+      - name: Save docker image
+        uses: actions/upload-artifact@v4
+        with:
+          name: mail-ai-agent-app
+          path: mail-ai-agent-app.tar
+  lint:
+    runs-on: ubuntu-latest
+    environment: test
+    needs: build
+    steps:
+      - name: Download docker image
+        uses: actions/download-artifact@v4
+        with:
+          name: mail-ai-agent-app
+      - name: Load docker image
+        run: docker load < mail-ai-agent-app.tar
+      - name: Run ruff check
+        run: docker run mail-ai-agent-app ruff check .
+      - name: Run ty check
+        run: docker run mail-ai-agent-app ty check .
+  test:
+    runs-on: ubuntu-latest
+    environment: test
+    needs: lint
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Download docker image
+        uses: actions/download-artifact@v4
+        with:
+          name: mail-ai-agent-app
+      - name: Load docker image
+        run: docker load < mail-ai-agent-app.tar
+      - name: Make .env
+        run: cp .env.example .env
+      - name: Start containers
+        run: docker compose up -d
+      - name: Get containers list
+        run: docker ps -a
+      - name: Get app container logs
+        run: docker logs mail-ai-agent-app-1
+      - name: Run tests
+        run: docker exec -i mail-ai-agent-app-1 poetry run pytest --reruns 3 --reruns-delay 5

@@ -1,0 +1,14 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    volumes:
+      - ./.data/ollama:/root/.ollama
+      - ./scripts/ollama.entrypoint.sh:/entrypoint.sh
+      - ./scripts/ollama.healthcheck.sh:/healthcheck.sh
+    entrypoint: ["/usr/bin/bash", "/entrypoint.sh"]
+    healthcheck:
+      test: ["CMD", "/usr/bin/bash", "/healthcheck.sh"]
+      interval: 5s
+      timeout: 3s
+      retries: 60
+      start_period: 5s
