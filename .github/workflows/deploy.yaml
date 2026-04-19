@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - upgrade-deploy
 
 jobs:
   build:
@@ -20,11 +21,13 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build docker image
-        run: docker build -t mail-ai-agent-app -f deploy/Dockerfile .
       - name: Set version
-        run: echo "PROJECT_VERSION=$(docker run mail-ai-agent-app poetry version --short)" >> $GITHUB_ENV
-      - name: Push image
-        run: docker push mail-ai-agent-app:$PROJECT_VERSION
-      - name: Push image latest
-        run: docker push mail-ai-agent-app:latest
+        id: vars
+        run: echo "tag=${docker run mail-ai-agent-app poetry version --short}" >> $GITHUB_OUTPUT
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./deploy/Dockerfile
+          push: true
+          tags: ghcr.io/${{ github.repository }}:${{ steps.vars.outputs.tag }}, ghcr.io/${{ github.repository }}:latest
