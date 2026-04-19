@@ -24,14 +24,14 @@ def make_email_document(msg: Message) -> Document:
     if msg.is_multipart():
         for part in msg.walk():
             if part.get_content_type() == "text/plain":
-                content = part.get_payload(decode=True).decode()
+                content = part.get_payload(decode=True)
     else:
-        content = msg.get_payload(decode=True).decode()
+        content = msg.get_payload(decode=True)
 
     return Document(page_content=make_content_text(
         subject=msg.get("Subject", "Unknown"),
         from_val=msg.get("From", "Unknown"),
         to_val=msg.get("To", "Unknown"),
         date=msg.get("Date", "Unknown"),
-        content=content
+        content=str(content)
     ))
