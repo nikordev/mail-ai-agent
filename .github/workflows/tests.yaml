@@ -13,14 +13,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Build docker image
-        run: docker build -t agent .
+        run: docker build -t mail-ai-agent-app .
       - name: Export docker image
-        run: docker save agent > agent.tar
+        run: docker save mail-ai-agent-app > mail-ai-agent-app.tar
       - name: Save docker image
         uses: actions/upload-artifact@v4
         with:
-          name: agent-artifact
-          path: agent.tar
+          name: mail-ai-agent-app
+          path: mail-ai-agent-app.tar
   lint:
     runs-on: ubuntu-latest
     environment: test
@@ -29,8 +29,27 @@ jobs:
       - name: Download docker image
         uses: actions/download-artifact@v4
         with:
-          name: agent-artifact
+          name: mail-ai-agent-app
       - name: Load docker image
-        run: docker load < agent.tar
+        run: docker load < mail-ai-agent-app.tar
       - name: Run ruff check
-        run: docker run agent ruff check .
+        run: docker run mail-ai-agent-app ruff check .
+      - name: Run ty check
+        run: docker run mail-ai-agent-app ty check .
+  test:
+    runs-on: ubuntu-latest
+    environment: test
+    needs: lint
+    steps:
+      - name: Download docker image
+        uses: actions/download-artifact@v4
+        with:
+          name: mail-ai-agent-app
+      - name: Load docker image
+        run: docker load < mail-ai-agent-app.tar
+      - name: Make .env
+        run: cp .env.example .env
+      - name: Start containers
+        run: docker compose up -d
+      - name: Run tests
+        run: docker compose exec -T mail-ai-agent-app poetry run pytest
