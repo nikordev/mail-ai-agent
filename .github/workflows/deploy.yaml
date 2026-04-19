@@ -1,4 +1,4 @@
-name: Run Agent Tests
+name: Deploy Agent
 on:
   push:
     branches:
@@ -23,7 +23,7 @@ jobs:
       - name: Build docker image
         run: docker build -t mail-ai-agent-app -f deploy/Dockerfile .
       - name: Set version
-        run: echo "PROJECT_VERSION=$(poetry version --short)" >> $GITHUB_ENV
+        run: echo "PROJECT_VERSION=$(docker run mail-ai-agent-app poetry version --short)" >> $GITHUB_ENV
       - name: Push image
         run: docker push mail-ai-agent-app:$PROJECT_VERSION
       - name: Push image latest
