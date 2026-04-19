@@ -1,9 +1,6 @@
 name: Run Agent Tests
 on:
-  push:
-    branches: [init-agent-structure]
   workflow_dispatch:
-  workflow_call:
 
 jobs:
   build:
@@ -53,5 +50,7 @@ jobs:
         run: cp .env.example .env
       - name: Start containers
         run: docker compose up -d
+      - name: Get app container logs
+        run: docker logs mail-ai-agent-app-1
       - name: Run tests
         run: docker compose exec -T mail-ai-agent-app-1 poetry run pytest
