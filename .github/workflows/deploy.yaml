@@ -23,7 +23,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Set version
         id: vars
-        run: echo "tag=${docker run mail-ai-agent-app poetry version --short}" >> $GITHUB_OUTPUT
+        run: echo "tag=$(docker run mail-ai-agent-app poetry version --short)" >> $GITHUB_OUTPUT
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
