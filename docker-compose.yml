@@ -1,4 +1,6 @@
 name: mail-ai-agent
+include:
+  - ./deploy/docker-compose.common.yml
 services:
   mailpit:
     image: axllent/mailpit:latest
@@ -7,12 +9,6 @@ services:
       - "MP_SMTP_AUTH_ALLOW_INSECURE=true"
       - "MP_POP3_BINDADDR=0.0.0.0:1110"
       - "MP_POP3_AUTH=pop3_user@example.com:pop3_password"
-  ollama:
-    image: ollama/ollama:latest
-    volumes:
-      - ./.data/ollama:/root/.ollama
-      - ./deploy/scripts/ollama.entrypoint.sh:/entrypoint.sh
-    entrypoint: ["/usr/bin/bash", "/entrypoint.sh"]
   app:
     build:
       context: .
@@ -20,3 +16,6 @@ services:
     volumes:
       - ./:/app
       - ./.data/app:/data
+    depends_on:
+      ollama:
+        condition: service_healthy
