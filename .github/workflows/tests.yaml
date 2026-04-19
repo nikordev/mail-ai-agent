@@ -58,4 +58,4 @@ jobs:
       - name: Get app container logs
         run: docker logs mail-ai-agent-app-1
       - name: Run tests
-        run: docker exec -T mail-ai-agent-app-1 poetry run pytest
+        run: docker exec -it mail-ai-agent-app-1 poetry run pytest
