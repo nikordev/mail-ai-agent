@@ -1,9 +1,12 @@
-from poplib import POP3, POP3_SSL
 from email import message_from_bytes
+from poplib import POP3, POP3_SSL
+
 from fastmcp.tools import tool
 from langchain_chroma import Chroma
 from langchain_ollama import OllamaEmbeddings
+
 from src.utils.core import make_email_document
+
 
 class LoadMailsController:
     def __init__(

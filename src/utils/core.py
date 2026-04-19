@@ -1,8 +1,22 @@
 from email.message import Message
+
 from langchain_core.documents import Document
 
-def make_content_text(subject: str, from_val: str, to_val: str, date: str, content: str) -> str:
-    return f"Subject: {subject}\nFrom: {from_val}\nTo: {to_val}\nDate: {date}\nContent: {content}"
+
+def make_content_text(
+    subject: str,
+    from_val: str,
+    to_val: str,
+    date: str,
+    content: str
+) -> str:
+    return (
+        f"Subject: {subject}",
+        f"From: {from_val}",
+        f"To: {to_val}",
+        f"Date: {date}",
+        f"Content: {content}"
+    )
 
 def make_email_document(msg: Message) -> Document:
     content = "Unknown"

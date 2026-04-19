@@ -1,10 +1,11 @@
+from fastmcp.tools import tool
 from langchain_chroma import Chroma
-from langchain_ollama import OllamaEmbeddings
-from langchain_community.llms import Ollama
 from langchain_classic.chains import create_retrieval_chain
 from langchain_classic.chains.combine_documents import create_stuff_documents_chain
-from langchain_core.prompts import ChatPromptTemplate,PromptTemplate
-from fastmcp.tools import tool
+from langchain_community.llms import Ollama
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_ollama import OllamaEmbeddings
+
 
 class FindMailsController:
     def __init__(self, ollama_url: str):
@@ -33,13 +34,25 @@ class FindMailsController:
         )
 
         prompt = ChatPromptTemplate.from_messages([
-            ("system", "You are an assistant for question-answering tasks. Use the following pieces of retrieved context to answer the question. If you don't know the answer, just say that you don't know. Use three sentences maximum and keep the answer concise:\n\n<context>\n{context}\n</context>"),
+            ("system", (
+                "You are an assistant for question-answering tasks.",
+                "Use the following pieces of retrieved context to answer the question.",
+                "If you don't know the answer, just say that you don't know.",
+                "Use three sentences maximum and keep the answer concise:",
+                "",
+                "<context>",
+                "{context}",
+                "</context>"
+            )),
             ("placeholder", "{chat_history}"),
             ("human", "{input}")
         ])
 
         combine_docs_chain = create_stuff_documents_chain(llm, prompt)
-        retrieval_chain = create_retrieval_chain(db.as_retriever(search_kwargs={"k": 10}), combine_docs_chain)
+        retrieval_chain = create_retrieval_chain(
+            db.as_retriever(search_kwargs={"k": 10}),
+            combine_docs_chain
+        )
 
         response = retrieval_chain.invoke({"input": query})
 

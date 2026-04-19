@@ -1,7 +1,9 @@
 from os import getenv
+
 from fastmcp import FastMCP
-from tools.load_emails import LoadMailsController
+
 from tools.find_emails import FindMailsController
+from tools.load_emails import LoadMailsController
 
 mcp = FastMCP("mail-ai-agent")
 

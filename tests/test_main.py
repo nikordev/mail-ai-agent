@@ -1,13 +1,14 @@
-import pytest
 import uuid
+from email.message import EmailMessage
 from os import getenv
 from smtplib import SMTP
-from email.message import EmailMessage
+
+import pytest
 from fastmcp.client import Client
 from fastmcp.client.transports import FastMCPTransport
 from langchain_chroma import Chroma
-from langchain_ollama import OllamaEmbeddings
 from langchain_core.documents import Document
+from langchain_ollama import OllamaEmbeddings
 
 from src.main import mcp
 from src.utils.core import make_content_text
@@ -45,7 +46,10 @@ async def test_list_tools(main_mcp_client: Client[FastMCPTransport]):
 
     assert len(list_tools) == 2
 
-async def test_find_emails(main_mcp_client: Client[FastMCPTransport], chroma_client: Chroma):
+async def test_find_emails(
+        main_mcp_client: Client[FastMCPTransport],
+        chroma_client: Chroma
+):
     chroma_client.reset_collection()
 
     chroma_client.add_documents([
@@ -84,7 +88,11 @@ async def test_find_emails(main_mcp_client: Client[FastMCPTransport], chroma_cli
 
     assert "3" in result.data or "three" in result.data
 
-async def test_load_emails(main_mcp_client: Client[FastMCPTransport], smtp_client: SMTP, chroma_client: Chroma):
+async def test_load_emails(
+        main_mcp_client: Client[FastMCPTransport],
+        smtp_client: SMTP,
+        chroma_client: Chroma
+):
     chroma_client.reset_collection()
 
     query=str(uuid.uuid4())
@@ -113,7 +121,8 @@ async def test_load_emails(main_mcp_client: Client[FastMCPTransport], smtp_clien
     assert result2.data > result1.data
 
     result = await main_mcp_client.call_tool(
-        name="find_emails", arguments={"query": f"print integer count of '{query}' only"}
+        name="find_emails",
+        arguments={"query": f"print integer count of '{query}' only"}
     )
 
     assert "1" in result.data or "one" in result.data
