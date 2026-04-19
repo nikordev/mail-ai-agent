@@ -54,4 +54,4 @@ jobs:
       - name: Start containers
         run: docker compose up -d
       - name: Run tests
-        run: docker compose exec -T mail-ai-agent-app poetry run pytest
+        run: docker compose exec -T mail-ai-agent-app-1 poetry run pytest
