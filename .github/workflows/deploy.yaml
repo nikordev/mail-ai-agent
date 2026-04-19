@@ -24,8 +24,10 @@ jobs:
       - name: Set version
         run: echo "PROJECT_VERSION=$(docker run mail-ai-agent-app poetry version --short)" >> $GITHUB_ENV
       - name: Get version 1
-        run: echo $PROJECT_VERSION
+        run: docker run mail-ai-agent-app poetry version --short
       - name: Get version 2
+        run: echo $PROJECT_VERSION
+      - name: Get version 3
         run: echo "${{ env.PROJECT_VERSION }}"
       - name: Build and push
         uses: docker/build-push-action@v5
