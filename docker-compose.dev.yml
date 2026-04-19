@@ -1,0 +1,22 @@
+name: mail-ai-agent
+services:
+  mailpit:
+    image: axllent/mailpit:latest
+    environment:
+      - "MP_SMTP_AUTH_ACCEPT_ANY=true"
+      - "MP_SMTP_AUTH_ALLOW_INSECURE=true"
+      - "MP_POP3_BINDADDR=0.0.0.0:1110"
+      - "MP_POP3_AUTH=pop3_user@example.com:pop3_password"
+  ollama:
+    image: ollama/ollama:latest
+    volumes:
+      - ./.data/ollama:/root/.ollama
+      - ./deploy/scripts/ollama.entrypoint.sh:/entrypoint.sh
+    entrypoint: ["/usr/bin/bash", "/entrypoint.sh"]
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./:/app
+      - ./.data/app:/data

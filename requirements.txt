@@ -1,0 +1,7 @@
+fastmcp
+chromadb
+langchain_core
+langchain_chroma
+langchain_ollama
+langchain_classic
+langchain_community
