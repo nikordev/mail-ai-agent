@@ -53,6 +53,8 @@ jobs:
         run: cp .env.example .env
       - name: Start containers
         run: docker compose up -d
+      - name: Get containers list
+        run: docker ps -a
       - name: Get app container logs
         run: docker logs mail-ai-agent-app-1
       - name: Run tests
