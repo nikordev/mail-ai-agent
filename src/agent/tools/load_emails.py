@@ -16,7 +16,8 @@ class LoadMailsController:
         pop3_port: int,
         pop3_user: str,
         pop3_pass: str,
-        pop3_ssl: int
+        pop3_ssl: int,
+        pop3_debug: int
     ):
         self.ollama_url = ollama_url
         self.pop3_host = pop3_host
@@ -24,6 +25,7 @@ class LoadMailsController:
         self.pop3_user = pop3_user
         self.pop3_pass = pop3_pass
         self.pop3_ssl = pop3_ssl
+        self.pop3_debug = pop3_debug
 
     @tool(
         name="load_emails",
@@ -36,6 +38,7 @@ class LoadMailsController:
         else:
             server = POP3(host=self.pop3_host, port=self.pop3_port)
 
+        server.set_debuglevel(self.pop3_debug)
         server.user(self.pop3_user)
         server.pass_(self.pop3_pass)
 

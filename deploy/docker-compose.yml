@@ -9,3 +9,6 @@ services:
     depends_on:
       ollama:
         condition: service_healthy
+    env_file:
+      - .env
+    restart: unless-stopped

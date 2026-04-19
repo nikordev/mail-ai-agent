@@ -12,3 +12,18 @@ services:
       timeout: 3s
       retries: 60
       start_period: 5s
+    restart: unless-stopped
+  mcp-inspector:
+    image: ghcr.io/modelcontextprotocol/inspector:latest
+    ports:
+      - "${MCP_INSPECTOR_HOST}:6274:6274"
+      - "${MCP_INSPECTOR_HOST}:6277:6277"
+    environment:
+      - HOST=0.0.0.0
+      - CLIENT_PORT=6274
+      - SERVER_PORT=6277
+      - DANGEROUSLY_OMIT_AUTH=true
+      - ALLOWED_ORIGINS=${MCP_INSPECTOR_ORIGINS}
+    profiles:
+      - debug
+    restart: unless-stopped
