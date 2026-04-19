@@ -10,13 +10,13 @@ def make_content_text(
     date: str,
     content: str
 ) -> str:
-    return (
+    return "\n".join((
         f"Subject: {subject}",
         f"From: {from_val}",
         f"To: {to_val}",
         f"Date: {date}",
         f"Content: {content}"
-    )
+    ))
 
 def make_email_document(msg: Message) -> Document:
     content = "Unknown"

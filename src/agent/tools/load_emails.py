@@ -5,7 +5,7 @@ from fastmcp.tools import tool
 from langchain_chroma import Chroma
 from langchain_ollama import OllamaEmbeddings
 
-from src.utils.core import make_email_document
+from src.agent.utils.core import make_email_document
 
 
 class LoadMailsController:

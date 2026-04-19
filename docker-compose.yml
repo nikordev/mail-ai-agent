@@ -16,7 +16,12 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     volumes:
       - ./:/app
       - ./.data/app:/data
+    command: >
+      sh -c "while true; do
+               echo 'Heartbeat...';
+               sleep 10;
+             done"

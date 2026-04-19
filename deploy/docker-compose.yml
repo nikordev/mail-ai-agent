@@ -1,0 +1,12 @@
+name: mail-ai-agent
+services:
+  ollama:
+    image: ollama/ollama:latest
+    volumes:
+      - ./.data/ollama:/root/.ollama
+      - ./scripts/ollama.entrypoint.sh:/entrypoint.sh
+    entrypoint: ["/usr/bin/bash", "/entrypoint.sh"]
+  app:
+    image: "ghcr.io/nikordev/mail-ai-agent:${APP_VERSION}"
+    volumes:
+      - ./.data/app:/data

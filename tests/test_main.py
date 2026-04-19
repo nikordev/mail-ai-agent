@@ -10,13 +10,13 @@ from langchain_chroma import Chroma
 from langchain_core.documents import Document
 from langchain_ollama import OllamaEmbeddings
 
-from src.main import mcp
-from src.utils.core import make_content_text
+from src.agent import make_mcp
+from src.agent.utils.core import make_content_text
 
 
 @pytest.fixture
 async def main_mcp_client():
-    async with Client(transport=mcp) as mcp_client:
+    async with Client(transport=make_mcp()) as mcp_client:
         yield mcp_client
 
 @pytest.fixture

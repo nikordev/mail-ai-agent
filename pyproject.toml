@@ -1,9 +1,52 @@
+####################
+# POETRY ###########
+####################
+
+[tool.poetry]
+name = "mail-ai-agent"
+version = "0.1.0"
+description = "This is a simple test implementation of an AI agent for working with mail"
+authors = ["Riakhovskii Nikolai <nikordev@gmail.com>"]
+readme = "README.md"
+packages = [{include = "agent", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastmcp = "~3.1"
+langchain_core = "~1.2"
+langchain_chroma = "~1.1"
+langchain_ollama = "~1.1"
+langchain_classic = "~1.0"
+langchain_community = "~0.4"
+
+[tool.poetry.group.dev.dependencies]
+ty = "~0.0"
+ruff = "~0.15"
+pytest = "~9.0"
+pytest-asyncio = "~1.3"
+pytest-env = "~1.6"
+
+[tool.poetry.scripts]
+agent = "agent:run"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+####################
+# PYTEST ###########
+####################
+
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 pythonpath = ["src"]
 
 [tool.pytest_env]
-env_files = [".env", ".test.env"]
+env_files = [".env"]
+
+####################
+# RUFF #############
+####################
 
 [tool.ruff]
 target-version = "py312"
@@ -25,3 +68,18 @@ quote-style = "double"
 indent-style = "space"
 skip-magic-trailing-comma = false
 line-ending = "auto"
+
+####################
+# TY ###############
+####################
+
+[tool.ty]
+target-version = "3.12"
+
+[tool.ty.environment]
+root = ["./src"]
+python = ".venv"
+
+[tool.ty.rules]
+all = "error"
+exclude = ["**/tests/**"]

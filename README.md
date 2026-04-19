@@ -14,13 +14,13 @@ cp .env.example .env
 ```
 
 ```
-docker compose -f docker-compose.dev.yml up -d --force-recreate 
+docker compose up -d --force-recreate 
 ```
 
 Rebuild:
 
 ```
-docker compose -f docker-compose.dev.yml up -d --force-recreate --build 
+docker compose up -d --force-recreate --build 
 ```
 
 ## PROD

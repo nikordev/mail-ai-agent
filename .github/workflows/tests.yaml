@@ -1,0 +1,31 @@
+name: Build Agent
+on:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build docker image
+        run: docker build -t agent .
+      - name: Export docker image
+        run: docker save agent > agent.tar
+      - name: Save docker image
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-artifact
+          path: agent.tar
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download docker image
+        uses: actions/download-artifact@v4
+        with:
+          name: agent-artifact
+      - name: Load docker image
+        run: docker load < agent.tar
+      - name: Run ruff check
+        run: docker run agent ruff check .
