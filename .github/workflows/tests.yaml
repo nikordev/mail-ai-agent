@@ -1,8 +1,8 @@
 name: Run Agent Tests
 on:
-  push:
+  pull_request:
     branches:
-      - init-agent-structure
+      - main
   workflow_dispatch:
 
 jobs:
@@ -58,4 +58,4 @@ jobs:
       - name: Get app container logs
         run: docker logs mail-ai-agent-app-1
       - name: Run tests
-        run: docker exec -it mail-ai-agent-app-1 poetry run pytest
+        run: docker exec -i mail-ai-agent-app-1 poetry run pytest
