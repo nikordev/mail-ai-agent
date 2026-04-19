@@ -37,8 +37,6 @@ Copy and prepare environment variables
 cp .env.example .env
 ```
 
-Prepare POP3 proxy config: https://github.com/simonrob/email-oauth2-proxy/blob/main/emailproxy.config
-
 Start containers
 
 ```
